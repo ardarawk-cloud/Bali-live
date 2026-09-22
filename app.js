@@ -1,12 +1,19 @@
 (() => {
   const BALI_TZ = "Asia/Makassar";
-  const CURRENT_VERSION = "1.3.0";
+  const CURRENT_VERSION = "1.4.0";
 
   const titleEl = document.getElementById("daypartTitle");
   const clockEl = document.getElementById("clock");
   const dateEl = document.getElementById("date");
   const promptEl = document.getElementById("prompt");
   const modeLabelEl = document.getElementById("modeLabel");
+
+  const aiCard = document.getElementById("aiLiveCard");
+  const aiCommand = document.getElementById("aiLiveCommand");
+  const aiViewer = document.getElementById("aiLiveViewer");
+  const aiQuestion = document.getElementById("aiLiveQuestion");
+  const aiThinking = document.getElementById("aiLiveThinking");
+  const aiAnswer = document.getElementById("aiLiveAnswer");
 
   const periods = [
     { start:0, end:299, cls:"theme-midnight", title:"BALI MIDNIGHT", mode:"CHILL • MUSIC • MIDNIGHT" },
@@ -94,6 +101,39 @@
     promptEl.textContent = prompts[promptIndex];
   }
 
+  function renderAI(s) {
+    if (!aiCard) return;
+    if (!s || !s.active) {
+      aiCard.classList.add("hidden");
+      return;
+    }
+
+    aiCommand.textContent = "!" + (s.command || "ai");
+    aiViewer.textContent = "@" + (s.username || s.nickname || "viewer");
+    aiQuestion.textContent = s.question || "";
+
+    const thinking = s.status === "thinking";
+    aiThinking.style.display = thinking ? "block" : "none";
+    aiAnswer.style.display = thinking ? "none" : "block";
+    aiAnswer.textContent = s.answer || "";
+    aiCard.classList.remove("hidden");
+  }
+
+  async function connectCloudAI() {
+    try {
+      const health = await fetch("/health?t="+Date.now(), { cache:"no-store" });
+      if (!health.ok) return;
+      const data = await health.json();
+      if (data.mode !== "cloud") return;
+
+      const events = new EventSource("/api/events");
+      events.onmessage = event => {
+        try { renderAI(JSON.parse(event.data)); } catch {}
+      };
+      events.onerror = () => {};
+    } catch {}
+  }
+
   async function checkVersion() {
     try {
       const res = await fetch(`./version.json?t=${Date.now()}`, { cache:"no-store" });
@@ -111,6 +151,8 @@
   buildEqualizer();
   buildRain();
   updateTimeAndTheme();
+  connectCloudAI();
+
   setInterval(updateTimeAndTheme, 1000);
   setInterval(rotatePrompt, 10000);
   setInterval(checkVersion, 30000);
