@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no" />
   <meta name="theme-color" content="#090b18" />
   <title>Bali Live</title>
-  <link rel="stylesheet" href="./style.css?v=1.0.0" />
+  <link rel="stylesheet" href="./style.css?v=1.1.0" />
 </head>
 <body class="theme-night">
   <main class="stage" id="stage">
@@ -21,16 +21,31 @@
       <div class="date" id="date">BALI TIME</div>
 
       <div class="equalizer" id="equalizer" aria-hidden="true"></div>
-
       <div class="rotating-prompt" id="prompt">DROP YOUR CITY IN CHAT</div>
     </section>
 
-    <section class="request-card">
-      <div class="request-kicker">SONG REQUEST</div>
-      <div class="request-title">Ketik di chat / Type in chat</div>
-      <div class="command">!play Judul Lagu - Artis</div>
-      <div class="example">Contoh: !play Levels - Avicii</div>
-      <div class="point-badge">1 POINT = 1 REQUEST</div>
+    <section class="interaction-card">
+      <div class="interaction-kicker">INTERACTIVE LIVE</div>
+
+      <div class="interaction-row">
+        <div class="interaction-icon">♫</div>
+        <div class="interaction-copy">
+          <div class="interaction-label">SONG REQUEST</div>
+          <div class="command">!play Judul Lagu - Artis</div>
+          <div class="example">Contoh: !play Levels - Avicii • 1 point = 1 request</div>
+        </div>
+      </div>
+
+      <div class="divider"></div>
+
+      <div class="interaction-row">
+        <div class="interaction-icon">AI</div>
+        <div class="interaction-copy">
+          <div class="interaction-label">BALI AI CHAT</div>
+          <div class="ai-commands">!curhat &nbsp; !tanya &nbsp; !roast &nbsp; !quote &nbsp; !jodoh</div>
+          <div class="example">Ketik command + pesanmu. Jawaban AI muncul langsung di LIVE.</div>
+        </div>
+      </div>
     </section>
 
     <section class="lower-strip">
@@ -39,6 +54,6 @@
     </section>
   </main>
 
-  <script src="./app.js?v=1.0.0"></script>
+  <script src="./app.js?v=1.1.0"></script>
 </body>
 </html>
