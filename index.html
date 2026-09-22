@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no" />
   <meta name="theme-color" content="#090b18" />
   <title>Bali Live</title>
-  <link rel="stylesheet" href="./style.css?v=1.2.2" />
+  <link rel="stylesheet" href="./style.css?v=1.3.0" />
 </head>
 <body class="theme-night">
   <main class="stage" id="stage">
@@ -17,18 +17,22 @@
     <section class="top">
       <div class="eyebrow">LIVE FROM BALI • INDONESIA</div>
       <h1 id="daypartTitle">BALI AFTER DARK</h1>
-      <div class="clock" id="clock">00:00:00</div>
       <div class="date" id="date">BALI TIME</div>
+      <div class="clock" id="clock">00:00:00</div>
 
       <div class="equalizer" id="equalizer" aria-hidden="true"></div>
       <div class="rotating-prompt" id="prompt">DROP YOUR CITY IN CHAT</div>
     </section>
 
     <section class="interaction-card">
-      <div class="interaction-kicker">INTERACTIVE LIVE</div>
+      <div class="interaction-kicker">
+        <span></span>
+        <strong>INTERACTIVE LIVE</strong>
+        <span></span>
+      </div>
 
       <div class="interaction-row">
-        <div class="interaction-icon">♫</div>
+        <div class="interaction-icon music">♫</div>
         <div class="interaction-copy">
           <div class="interaction-label">SONG REQUEST</div>
           <div class="command">!play Judul Lagu - Artis</div>
@@ -39,11 +43,11 @@
       <div class="divider"></div>
 
       <div class="interaction-row">
-        <div class="interaction-icon">AI</div>
+        <div class="interaction-icon ai">AI</div>
         <div class="interaction-copy">
           <div class="interaction-label">BALI AI CHAT</div>
-          <div class="ai-commands">!curhat &nbsp; !tanya &nbsp; !roast &nbsp; !quote &nbsp; !jodoh</div>
-          <div class="example">Ketik command + pesanmu. Jawaban AI muncul langsung di LIVE.</div>
+          <div class="command">!ai pertanyaan kamu</div>
+          <div class="example">Juga tersedia: !curhat • !tanya • !roast • !quote • !jodoh</div>
         </div>
       </div>
     </section>
@@ -54,6 +58,6 @@
     </section>
   </main>
 
-  <script src="./app.js?v=1.2.2"></script>
+  <script src="./app.js?v=1.3.0"></script>
 </body>
 </html>

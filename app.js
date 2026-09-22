@@ -1,6 +1,6 @@
 (() => {
   const BALI_TZ = "Asia/Makassar";
-  const CURRENT_VERSION = "1.2.2";
+  const CURRENT_VERSION = "1.3.0";
 
   const titleEl = document.getElementById("daypartTitle");
   const clockEl = document.getElementById("clock");
@@ -66,7 +66,6 @@
       bars.push(bar);
     }
 
-    // Keep the visualizer visibly alive even inside browser-source/webview environments.
     setInterval(() => {
       bars.forEach((bar, i) => {
         const wave = Math.sin((Date.now() / 220) + i * 0.68);

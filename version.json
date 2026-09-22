@@ -1,5 +1,5 @@
 {
-  "version": "1.2.2",
-  "updated_at": "2026-09-23T05:45:00+08:00",
-  "notes": "Rollback to the original Bali Live visual system and restore a visibly active equalizer without incremental layout patches"
+  "version": "1.3.0",
+  "updated_at": "2026-09-23T05:55:00+08:00",
+  "notes": "Precision typography pass: centered hierarchy, consistent spacing, restored active equalizer, and cleaner interactive text layout"
 }
