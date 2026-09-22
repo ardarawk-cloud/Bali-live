@@ -1,0 +1,24 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Bali AI Overlay</title>
+  <link rel="stylesheet" href="./overlay.css">
+</head>
+<body>
+  <main id="card" class="ai-card hidden">
+    <div class="topline">
+      <span class="badge">BALI AI</span>
+      <span id="command" class="mode">!curhat</span>
+    </div>
+    <div id="viewer" class="viewer">@viewer</div>
+    <div id="question" class="question"></div>
+    <div class="answer-wrap">
+      <div id="thinking" class="thinking">AI lagi mikir<span>.</span><span>.</span><span>.</span></div>
+      <div id="answer" class="answer"></div>
+    </div>
+  </main>
+  <script src="./overlay.js"></script>
+</body>
+</html>
