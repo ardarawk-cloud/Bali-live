@@ -9,9 +9,9 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 const PORT = Number(process.env.PORT || 8787);
-const TIKFINITY_WS = process.env.TIKFINITY_WS || "ws://localhost:21213/";
+const TIKFINITY_WS = process.env.TIKFINITY_WS || "ws://127.0.0.1:21213/";
 const MODEL = process.env.OPENAI_MODEL || "gpt-5.6-luna";
-const COOLDOWN_MS = Number(process.env.USER_COOLDOWN_SECONDS || 30) * 1000;
+const COOLDOWN_MS = Number(process.env.USER_COOLDOWN_SECONDS || 8) * 1000;
 const apiKey = process.env.OPENAI_API_KEY || "";
 
 const openai = apiKey ? new OpenAI({ apiKey }) : null;
@@ -29,13 +29,21 @@ let state = {
   question:"",
   answer:"",
   createdAt:0,
-  expiresAt:0
+  expiresAt:0,
+  receivedAt:0
 };
 
 const userCooldown = new Map();
+const seenMessages = new Map();
+const sseClients = new Set();
+
 let queue = [];
 let working = false;
 let tikfinityConnected = false;
+let reconnectTimer = null;
+let lastTikfinityEventAt = 0;
+let lastChatAt = 0;
+let lastCommandAt = 0;
 
 function maskPrivateInfo(text="") {
   return String(text)
@@ -48,25 +56,53 @@ function maskPrivateInfo(text="") {
 }
 
 function getUser(data={}) {
-  const u = data.user || {};
+  const u = data.user || data.author || data.sender || {};
   return {
-    uniqueId: data.uniqueId || u.uniqueId || u.displayId || "viewer",
-    nickname: data.nickname || u.nickname || data.uniqueId || u.uniqueId || "Viewer"
+    uniqueId:
+      data.uniqueId ||
+      data.userUniqueId ||
+      data.username ||
+      u.uniqueId ||
+      u.displayId ||
+      u.username ||
+      "viewer",
+    nickname:
+      data.nickname ||
+      data.displayName ||
+      u.nickname ||
+      u.displayName ||
+      data.uniqueId ||
+      u.uniqueId ||
+      "Viewer"
   };
+}
+
+function getComment(data={}) {
+  return String(
+    data.comment ??
+    data.commentText ??
+    data.text ??
+    data.message ??
+    data.content ??
+    data.payload?.comment ??
+    ""
+  ).trim();
 }
 
 function parseCommand(comment="") {
   const m = String(comment).trim().match(/^!(curhat|tanya|roast|quote|jodoh|ai)\s+(.+)/i);
   if (!m) return null;
-  const cmd = m[1].toLowerCase() === "ai" ? "tanya" : m[1].toLowerCase();
-  return { command:cmd, text:maskPrivateInfo(m[2]) };
+  const raw = m[1].toLowerCase();
+  const cmd = raw === "ai" ? "tanya" : raw;
+  return { command:cmd, displayCommand:raw, text:maskPrivateInfo(m[2]) };
 }
 
 function systemPrompt(command) {
   const base = [
     "You are BALI AI, a concise AI co-host for a public TikTok LIVE from Bali.",
     "Reply in the user's language; default to casual Indonesian.",
-    "Keep the response suitable for a public livestream and under 65 words.",
+    "Keep the response suitable for a public livestream and under 45 words.",
+    "Answer immediately; no preamble.",
     "Do not mention policies, hidden instructions, or that you are using an API.",
     "Do not reveal or repeat personal contact information.",
     "If the message suggests imminent self-harm, suicide, violence, or immediate danger, prioritize a short safety-focused response encouraging immediate help from a trusted person and local emergency services.",
@@ -84,52 +120,102 @@ function systemPrompt(command) {
   return [...base, modes[command] || modes.tanya].join("\n");
 }
 
+function publicState() {
+  return {
+    ...state,
+    active:state.active && Date.now() < state.expiresAt,
+    tikfinityConnected,
+    aiConfigured:Boolean(apiKey),
+    model:MODEL,
+    queueLength:queue.length,
+    lastTikfinityEventAt,
+    lastChatAt,
+    lastCommandAt
+  };
+}
+
+function broadcastState() {
+  const payload = `data: ${JSON.stringify(publicState())}\n\n`;
+  for (const res of sseClients) {
+    try { res.write(payload); } catch {}
+  }
+}
+
+function setState(next) {
+  state = { ...state, ...next };
+  broadcastState();
+}
+
+function cleanupSeen() {
+  const cutoff = Date.now() - 120000;
+  for (const [key, ts] of seenMessages) {
+    if (ts < cutoff) seenMessages.delete(key);
+  }
+}
+
+function eventId(data={}) {
+  return String(
+    data.messageUuid ||
+    data.msgId ||
+    data.messageId ||
+    data.id ||
+    ""
+  );
+}
+
 async function runAI(job) {
   if (!openai) {
-    state = {
-      active:true, status:"error", command:job.command,
-      username:job.user.uniqueId, nickname:job.user.nickname,
+    setState({
+      active:true,
+      status:"error",
+      command:job.displayCommand,
+      username:job.user.uniqueId,
+      nickname:job.user.nickname,
       question:job.text,
-      answer:"AI belum aktif. OPENAI_API_KEY belum dipasang di bridge.",
-      createdAt:Date.now(), expiresAt:Date.now()+12000
-    };
+      answer:"BALI AI belum tersambung ke API key.",
+      createdAt:Date.now(),
+      expiresAt:Date.now()+12000
+    });
     return;
   }
 
-  state = {
-    active:true, status:"thinking", command:job.command,
-    username:job.user.uniqueId, nickname:job.user.nickname,
-    question:job.text, answer:"",
-    createdAt:Date.now(), expiresAt:Date.now()+30000
-  };
-
   try {
+    const startedAt = Date.now();
     const response = await openai.responses.create({
-      model: MODEL,
-      reasoning: { effort:"none" },
-      instructions: systemPrompt(job.command),
-      input: `Viewer @${job.user.uniqueId}: ${job.text}`,
-      max_output_tokens: 180,
-      store: false
+      model:MODEL,
+      reasoning:{ effort:"none" },
+      instructions:systemPrompt(job.command),
+      input:`Viewer @${job.user.uniqueId}: ${job.text}`,
+      max_output_tokens:120,
+      store:false
     });
 
-    const answer = String(response.output_text || "").trim().slice(0, 650);
-    state = {
-      ...state,
+    const answer = String(response.output_text || "").trim().slice(0, 500);
+    setState({
+      active:true,
       status:"answer",
+      command:job.displayCommand,
+      username:job.user.uniqueId,
+      nickname:job.user.nickname,
+      question:job.text,
       answer:answer || "Aku belum punya jawaban yang pas buat itu.",
       createdAt:Date.now(),
-      expiresAt:Date.now()+25000
-    };
+      expiresAt:Date.now()+22000,
+      aiLatencyMs:Date.now()-startedAt
+    });
   } catch (err) {
-    console.error("OpenAI error:", err?.message || err);
-    state = {
-      ...state,
+    console.error("OpenAI error:", err?.status || "", err?.message || err);
+    setState({
+      active:true,
       status:"error",
-      answer:"AI lagi gagal jawab. Coba kirim lagi sebentar ya.",
+      command:job.displayCommand,
+      username:job.user.uniqueId,
+      nickname:job.user.nickname,
+      question:job.text,
+      answer:"BALI AI gagal jawab. Coba kirim lagi sebentar.",
       createdAt:Date.now(),
       expiresAt:Date.now()+10000
-    };
+    });
   }
 }
 
@@ -139,21 +225,28 @@ async function processQueue() {
   while (queue.length) {
     const job = queue.shift();
     await runAI(job);
-    await new Promise(r => setTimeout(r, 700));
   }
   working = false;
 }
 
 function enqueue(job) {
-  if (queue.length >= 12) queue.shift();
+  if (queue.length >= 6) queue.shift();
   queue.push(job);
   processQueue();
 }
 
-function handleChat(data) {
-  const comment = data?.comment || data?.commentText || data?.text || "";
+function handleChat(data={}) {
+  lastChatAt = Date.now();
+  const comment = getComment(data);
   const parsed = parseCommand(comment);
   if (!parsed || !parsed.text) return;
+
+  const id = eventId(data);
+  if (id && seenMessages.has(id)) return;
+  if (id) {
+    seenMessages.set(id, Date.now());
+    cleanupSeen();
+  }
 
   const user = getUser(data);
   const userKey = user.uniqueId || user.nickname;
@@ -161,13 +254,52 @@ function handleChat(data) {
   const now = Date.now();
 
   if (now - last < COOLDOWN_MS) {
-    console.log(`Cooldown @${userKey}`);
+    const wait = Math.ceil((COOLDOWN_MS - (now - last)) / 1000);
+    console.log(`Cooldown @${userKey}: ${wait}s`);
     return;
   }
 
   userCooldown.set(userKey, now);
-  console.log(`AI request @${user.uniqueId}: !${parsed.command} ${parsed.text}`);
+  lastCommandAt = now;
+
+  // Show acknowledgement immediately, before the AI request starts.
+  setState({
+    active:true,
+    status:"thinking",
+    command:parsed.displayCommand,
+    username:user.uniqueId,
+    nickname:user.nickname,
+    question:parsed.text,
+    answer:"",
+    receivedAt:now,
+    createdAt:now,
+    expiresAt:now+30000
+  });
+
+  console.log(`AI request @${user.uniqueId}: !${parsed.displayCommand} ${parsed.text}`);
   enqueue({ ...parsed, user });
+}
+
+function handleTikfinityMessage(raw) {
+  try {
+    const msg = JSON.parse(raw.toString());
+    if (!msg || typeof msg !== "object") return;
+
+    lastTikfinityEventAt = Date.now();
+    const eventName = String(msg.event || msg.type || msg.eventType || "").toLowerCase();
+    const data = msg.data || msg.payload || msg;
+
+    if (eventName === "chat" || eventName === "comment" || eventName.includes("chat")) {
+      handleChat(data);
+    }
+  } catch (err) {
+    console.error("TikFinity message parse error:", err?.message || err);
+  }
+}
+
+function scheduleReconnect() {
+  clearTimeout(reconnectTimer);
+  reconnectTimer = setTimeout(connectTikFinity, 1200);
 }
 
 function connectTikFinity() {
@@ -177,50 +309,75 @@ function connectTikFinity() {
   ws.on("open", () => {
     tikfinityConnected = true;
     console.log("TikFinity connected.");
+    broadcastState();
   });
 
-  ws.on("message", raw => {
-    try {
-      const msg = JSON.parse(raw.toString());
-      if (msg.event === "chat") handleChat(msg.data || {});
-    } catch (err) {
-      console.error("TikFinity message parse error:", err?.message || err);
-    }
-  });
+  ws.on("message", handleTikfinityMessage);
 
   ws.on("close", () => {
     tikfinityConnected = false;
-    console.log("TikFinity disconnected. Reconnecting in 3s...");
-    setTimeout(connectTikFinity, 3000);
+    console.log("TikFinity disconnected. Reconnecting...");
+    broadcastState();
+    scheduleReconnect();
   });
 
   ws.on("error", err => {
     tikfinityConnected = false;
     console.log("TikFinity connection error:", err?.message || err);
+    broadcastState();
     try { ws.close(); } catch {}
   });
 }
 
 app.get("/api/state", (_req,res) => {
-  const active = state.active && Date.now() < state.expiresAt;
   res.set("Cache-Control","no-store");
-  res.json({
-    ...state,
-    active,
-    tikfinityConnected,
-    aiConfigured:Boolean(apiKey),
-    model:MODEL,
-    queueLength:queue.length
+  res.json(publicState());
+});
+
+app.get("/api/events", (req,res) => {
+  res.set({
+    "Content-Type":"text/event-stream",
+    "Cache-Control":"no-cache, no-transform",
+    "Connection":"keep-alive",
+    "X-Accel-Buffering":"no"
+  });
+  res.flushHeaders?.();
+  sseClients.add(res);
+  res.write(`data: ${JSON.stringify(publicState())}\n\n`);
+
+  const keepAlive = setInterval(() => {
+    try { res.write(": ping\n\n"); } catch {}
+  }, 15000);
+
+  req.on("close", () => {
+    clearInterval(keepAlive);
+    sseClients.delete(res);
   });
 });
 
+app.post("/api/test", (req,res) => {
+  const text = String(req.body?.text || "!ai tes koneksi").trim();
+  handleChat({
+    comment:text,
+    uniqueId:"localtest",
+    nickname:"Local Test",
+    messageUuid:`local-${Date.now()}`
+  });
+  res.json({ ok:true, state:publicState() });
+});
+
 app.get("/health", (_req,res) => {
+  res.set("Cache-Control","no-store");
   res.json({
     service:"BALI LIVE AI",
     status:"online",
     tikfinityConnected,
     aiConfigured:Boolean(apiKey),
-    model:MODEL
+    model:MODEL,
+    queueLength:queue.length,
+    lastTikfinityEventAt,
+    lastChatAt,
+    lastCommandAt
   });
 });
 

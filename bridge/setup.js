@@ -20,9 +20,9 @@ const model = modelAnswer || "gpt-5.6-luna";
 const env = [
   `OPENAI_API_KEY=${apiKey}`,
   `OPENAI_MODEL=${model}`,
-  "TIKFINITY_WS=ws://localhost:21213/",
+  "TIKFINITY_WS=ws://127.0.0.1:21213/",
   "PORT=8787",
-  "USER_COOLDOWN_SECONDS=30",
+  "USER_COOLDOWN_SECONDS=8",
   ""
 ].join("\n");
 

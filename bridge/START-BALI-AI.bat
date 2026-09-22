@@ -2,6 +2,15 @@
 title BALI LIVE AI
 cd /d "%~dp0"
 
+rem Auto-update when this folder is inside a Git clone.
+where git >nul 2>nul
+if not errorlevel 1 (
+  if exist "..\.git" (
+    echo Checking BALI LIVE AI update...
+    git -C "%~dp0.." pull --ff-only --quiet >nul 2>nul
+  )
+)
+
 where node >nul 2>nul
 if errorlevel 1 (
   echo.
