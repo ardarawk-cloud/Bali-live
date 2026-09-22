@@ -1,5 +1,5 @@
 {
-  "version": "1.2.0",
-  "updated_at": "2026-09-23T05:15:00+08:00",
-  "notes": "Redesigned live layout for TikTok safe zones, improved precision, and automatic session visuals/prompts by Bali time"
+  "version": "1.2.2",
+  "updated_at": "2026-09-23T05:45:00+08:00",
+  "notes": "Rollback to the original Bali Live visual system and restore a visibly active equalizer without incremental layout patches"
 }
