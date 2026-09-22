@@ -3,74 +3,57 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no" />
-  <meta name="theme-color" content="#07101d" />
+  <meta name="theme-color" content="#090b18" />
   <title>Bali Live</title>
-  <link rel="stylesheet" href="./style.css?v=1.2.0" />
+  <link rel="stylesheet" href="./style.css?v=1.2.2" />
 </head>
 <body class="theme-night">
   <main class="stage" id="stage">
-    <div class="atmosphere atmosphere-a"></div>
-    <div class="atmosphere atmosphere-b"></div>
-    <div class="horizon" aria-hidden="true"></div>
-    <div class="particles" id="rain" aria-hidden="true"></div>
+    <div class="ambient ambient-a"></div>
+    <div class="ambient ambient-b"></div>
+    <div class="grid"></div>
+    <div class="rain" id="rain" aria-hidden="true"></div>
 
-    <div class="safe-frame">
-      <section class="top">
-        <div class="session-line">
-          <span class="live-badge"><span class="live-dot"></span> LIVE</span>
-          <span class="eyebrow">FROM BALI • INDONESIA</span>
+    <section class="top">
+      <div class="eyebrow">LIVE FROM BALI • INDONESIA</div>
+      <h1 id="daypartTitle">BALI AFTER DARK</h1>
+      <div class="clock" id="clock">00:00:00</div>
+      <div class="date" id="date">BALI TIME</div>
+
+      <div class="equalizer" id="equalizer" aria-hidden="true"></div>
+      <div class="rotating-prompt" id="prompt">DROP YOUR CITY IN CHAT</div>
+    </section>
+
+    <section class="interaction-card">
+      <div class="interaction-kicker">INTERACTIVE LIVE</div>
+
+      <div class="interaction-row">
+        <div class="interaction-icon">♫</div>
+        <div class="interaction-copy">
+          <div class="interaction-label">SONG REQUEST</div>
+          <div class="command">!play Judul Lagu - Artis</div>
+          <div class="example">Contoh: !play Levels - Avicii • 1 point = 1 request</div>
         </div>
+      </div>
 
-        <h1 id="daypartTitle">BALI AFTER DARK</h1>
+      <div class="divider"></div>
 
-        <div class="time-wrap">
-          <div class="clock" id="clock">00:00:00</div>
-          <div class="date" id="date">BALI TIME</div>
+      <div class="interaction-row">
+        <div class="interaction-icon">AI</div>
+        <div class="interaction-copy">
+          <div class="interaction-label">BALI AI CHAT</div>
+          <div class="ai-commands">!curhat &nbsp; !tanya &nbsp; !roast &nbsp; !quote &nbsp; !jodoh</div>
+          <div class="example">Ketik command + pesanmu. Jawaban AI muncul langsung di LIVE.</div>
         </div>
+      </div>
+    </section>
 
-        <div class="equalizer" id="equalizer" aria-hidden="true"></div>
-
-        <div class="rotating-prompt" id="prompt">
-          <span class="prompt-icon">✦</span>
-          <span class="prompt-text">DROP YOUR CITY IN CHAT</span>
-        </div>
-      </section>
-
-      <section class="interaction-card">
-        <div class="interaction-kicker">
-          <span></span>
-          <strong>INTERACTIVE LIVE</strong>
-          <span></span>
-        </div>
-
-        <div class="interaction-row">
-          <div class="interaction-icon music">♫</div>
-          <div class="interaction-copy">
-            <div class="interaction-label">SONG REQUEST</div>
-            <div class="command">!play Judul Lagu - Artis</div>
-            <div class="example">Contoh: !play Levels - Avicii • 1 point = 1 request</div>
-          </div>
-        </div>
-
-        <div class="divider"></div>
-
-        <div class="interaction-row">
-          <div class="interaction-icon ai">AI</div>
-          <div class="interaction-copy">
-            <div class="interaction-label">BALI AI CHAT</div>
-            <div class="command ai-main">!ai pertanyaan kamu</div>
-            <div class="example">Juga tersedia: !curhat • !tanya • !roast • !quote • !jodoh</div>
-          </div>
-        </div>
-      </section>
-
-      <section class="lower-strip">
-        <div id="modeLabel">CHILL • MUSIC • NIGHT</div>
-        <div class="bali-time">WITA</div>
-      </section>
-    </div>
+    <section class="lower-strip">
+      <div class="live-indicator"><span></span> LIVE</div>
+      <div id="modeLabel">CHILL • MUSIC • NIGHT</div>
+    </section>
   </main>
 
-  <script src="./app.js?v=1.2.0"></script>
+  <script src="./app.js?v=1.2.2"></script>
 </body>
 </html>
