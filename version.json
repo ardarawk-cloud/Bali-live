@@ -1,5 +1,5 @@
 {
-  "version": "1.1.0",
-  "updated_at": "2026-09-23T00:55:00+08:00",
-  "notes": "Add Bali AI Chat commands and local TikFinity AI bridge package"
+  "version": "1.2.0",
+  "updated_at": "2026-09-23T05:15:00+08:00",
+  "notes": "Redesigned live layout for TikTok safe zones, improved precision, and automatic session visuals/prompts by Bali time"
 }
