@@ -1,6 +1,6 @@
 (() => {
   const BALI_TZ = "Asia/Makassar";
-  const CURRENT_VERSION = "1.0.0";
+  const CURRENT_VERSION = "1.1.0";
 
   const titleEl = document.getElementById("daypartTitle");
   const clockEl = document.getElementById("clock");
@@ -18,9 +18,10 @@
 
   const prompts = [
     "DROP YOUR CITY IN CHAT",
-    "WHERE ARE YOU WATCHING FROM?",
-    "REQUEST YOUR FAVORITE SONG ↓",
-    "TYPE !play SONG - ARTIST",
+    "REQUEST SONG: !play SONG - ARTIST",
+    "CURHAT KE AI: !curhat PESANMU",
+    "ASK BALI AI: !tanya PERTANYAANMU",
+    "FUN MODE: !roast • !quote • !jodoh",
     "BALI TIME — WHO IS STILL AWAKE?"
   ];
 
@@ -56,7 +57,7 @@
     for (let i=0; i<24; i++) {
       const bar = document.createElement("span");
       bar.className = "bar";
-      bar.style.height = `${28 + Math.random()*66}px`;
+      bar.style.height = `${24 + Math.random()*58}px`;
       bar.style.animationDuration = `${0.35 + Math.random()*0.8}s`;
       bar.style.animationDelay = `${-Math.random()}s`;
       eq.appendChild(bar);
@@ -100,7 +101,7 @@
   buildRain();
   updateTimeAndTheme();
   setInterval(updateTimeAndTheme, 1000);
-  setInterval(rotatePrompt, 12000);
+  setInterval(rotatePrompt, 10000);
   setInterval(checkVersion, 30000);
   setTimeout(checkVersion, 5000);
 })();
