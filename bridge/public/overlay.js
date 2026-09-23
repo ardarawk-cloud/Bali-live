@@ -1,5 +1,6 @@
 const card = document.getElementById("card");
 const viewer = document.getElementById("viewer");
+const avatar = document.getElementById("avatar");
 const command = document.getElementById("command");
 const question = document.getElementById("question");
 const answer = document.getElementById("answer");
@@ -14,17 +15,21 @@ function render(s){
     return;
   }
 
-  const key = [s.createdAt,s.status,s.answer,s.question].join("|");
+  const key = [s.createdAt,s.status,s.answer,s.question,s.username].join("|");
   if(key !== lastKey){
     lastKey = key;
+    const handle = s.username || s.nickname || "viewer";
     command.textContent = "!" + (s.command || "ai");
-    viewer.textContent = "@" + (s.username || s.nickname || "viewer");
+    viewer.textContent = "@" + handle;
+    avatar.textContent = String(handle).replace(/^@/,"").charAt(0).toUpperCase() || "A";
     question.textContent = s.question || "";
 
     const isThinking = s.status === "thinking";
-    thinking.style.display = isThinking ? "block" : "none";
+    thinking.style.display = isThinking ? "flex" : "none";
     answer.style.display = isThinking ? "none" : "block";
     answer.textContent = s.answer || "";
+
+    card.classList.toggle("answering", !isThinking);
   }
 
   card.classList.remove("hidden");
@@ -41,7 +46,7 @@ async function poll(){
 
 function startFallback(){
   if(fallbackTimer) return;
-  fallbackTimer = setInterval(poll, 1200);
+  fallbackTimer = setInterval(poll, 1000);
   poll();
 }
 
@@ -52,24 +57,19 @@ function connectEvents(){
   }
 
   const es = new EventSource("/api/events");
-
   es.onmessage = event => {
-    try{
-      render(JSON.parse(event.data));
-    }catch{}
+    try{ render(JSON.parse(event.data)); }catch{}
   };
-
   es.onopen = () => {
     if(fallbackTimer){
       clearInterval(fallbackTimer);
       fallbackTimer = null;
     }
   };
-
   es.onerror = () => {
     es.close();
     startFallback();
-    setTimeout(connectEvents, 1500);
+    setTimeout(connectEvents, 1600);
   };
 }
 
