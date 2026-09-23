@@ -1,5 +1,5 @@
 {
-  "version": "1.5.2",
-  "updated_at": "2026-09-23T18:00:00+08:00",
-  "notes": "Fix live WITA clock in TikTok LIVE Studio by removing dependency on Asia/Makassar IANA timezone support; clock now uses reliable UTC+8 calculation."
+  "version": "1.6.0",
+  "updated_at": "2026-09-23T20:42:00+08:00",
+  "notes": "Premium visual refresh for Bali Live plus redesigned Bali AI question/thinking/answer overlay. TTS remains external via TikFinity."
 }
