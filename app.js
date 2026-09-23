@@ -1,6 +1,6 @@
 (() => {
   const BALI_TZ = "Asia/Makassar";
-  const CURRENT_VERSION = "1.5.1";
+  const CURRENT_VERSION = "1.5.2";
 
   const titleEl = document.getElementById("daypartTitle");
   const clockEl = document.getElementById("clock");
@@ -32,14 +32,28 @@
     "BALI TIME — WHO IS STILL AWAKE?"
   ];
 
+  // TikTok LIVE Studio's embedded browser may not ship full IANA timezone data.
+  // Calculate WITA directly as UTC+8 so the live clock works reliably everywhere.
   function baliParts() {
-    const parts = new Intl.DateTimeFormat("en-GB", {
-      timeZone:BALI_TZ,
-      year:"numeric", month:"2-digit", day:"2-digit",
-      hour:"2-digit", minute:"2-digit", second:"2-digit",
-      hour12:false
-    }).formatToParts(new Date());
-    return Object.fromEntries(parts.map(p => [p.type,p.value]));
+    const now = new Date();
+    const bali = new Date(now.getTime() + (8 * 60 * 60 * 1000));
+    const pad = n => String(n).padStart(2, "0");
+
+    return {
+      year: String(bali.getUTCFullYear()),
+      month: pad(bali.getUTCMonth() + 1),
+      day: pad(bali.getUTCDate()),
+      hour: pad(bali.getUTCHours()),
+      minute: pad(bali.getUTCMinutes()),
+      second: pad(bali.getUTCSeconds()),
+      weekday: bali.getUTCDay()
+    };
+  }
+
+  function baliDateLabel(p) {
+    const weekdays = ["SUNDAY","MONDAY","TUESDAY","WEDNESDAY","THURSDAY","FRIDAY","SATURDAY"];
+    const months = ["JANUARY","FEBRUARY","MARCH","APRIL","MAY","JUNE","JULY","AUGUST","SEPTEMBER","OCTOBER","NOVEMBER","DECEMBER"];
+    return `${weekdays[p.weekday]} ${p.day} ${months[Number(p.month) - 1]} ${p.year}`;
   }
 
   function updateTimeAndTheme() {
@@ -53,10 +67,7 @@
     modeLabelEl.textContent = period.mode;
 
     clockEl.textContent = `${p.hour}:${p.minute}:${p.second}`;
-    dateEl.textContent = new Intl.DateTimeFormat("en-GB", {
-      timeZone:BALI_TZ,
-      weekday:"long", day:"2-digit", month:"long", year:"numeric"
-    }).format(new Date()).toUpperCase();
+    dateEl.textContent = baliDateLabel(p);
   }
 
   function buildEqualizer() {
