@@ -1,5 +1,5 @@
 {
-  "version": "1.5.1",
-  "updated_at": "2026-09-23T15:30:00+08:00",
-  "notes": "Fix startup crash caused by obsolete rain initializer after layout cleanup; restores live clock, auto theme, equalizer and rotating prompts."
+  "version": "1.5.2",
+  "updated_at": "2026-09-23T18:00:00+08:00",
+  "notes": "Fix live WITA clock in TikTok LIVE Studio by removing dependency on Asia/Makassar IANA timezone support; clock now uses reliable UTC+8 calculation."
 }
