@@ -1,5 +1,5 @@
 {
-  "version": "1.5.0",
-  "updated_at": "2026-09-23T15:20:00+08:00",
-  "notes": "Stable GitHub Pages radio layout for TikTok LIVE Studio; fixed 800x600-friendly visual, stacked request/AI rows, no debug toolbar."
+  "version": "1.5.1",
+  "updated_at": "2026-09-23T15:30:00+08:00",
+  "notes": "Fix startup crash caused by obsolete rain initializer after layout cleanup; restores live clock, auto theme, equalizer and rotating prompts."
 }
