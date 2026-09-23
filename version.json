@@ -1,5 +1,5 @@
 {
-  "version": "1.7.0",
-  "updated_at": "2026-09-24T03:05:00+08:00",
-  "notes": "Full 24/7 vintage radio layout redesign. Bali Live Radio is now the main station identity; dayparts are secondary, while WITA clock, song request, Bali AI and live status remain."
+  "version": "1.7.1",
+  "updated_at": "2026-09-24T04:18:00+08:00",
+  "notes": "Final polish of the v1.7 vintage radio layout: stronger mobile readability, warmer amber display, crisper branding, brighter ON AIR, clearer speaker/brass details, stronger request and Bali AI cards, improved tuner/equalizer visibility, and refined AI popup. Layout and functionality remain unchanged."
 }
