@@ -1,6 +1,6 @@
 (() => {
   const BALI_TZ = "Asia/Makassar";
-  const CURRENT_VERSION = "1.6.0";
+  const CURRENT_VERSION = "1.7.0";
 
   const titleEl = document.getElementById("daypartTitle");
   const clockEl = document.getElementById("clock");
@@ -16,20 +16,20 @@
   const aiAnswer = document.getElementById("aiLiveAnswer");
 
   const periods = [
-    { start:0, end:299, cls:"theme-midnight", title:"BALI MIDNIGHT", mode:"CHILL • MUSIC • MIDNIGHT" },
-    { start:300, end:659, cls:"theme-morning", title:"BALI MORNING", mode:"MORNING • MUSIC • BALI" },
-    { start:660, end:959, cls:"theme-day", title:"BALI DAY VIBES", mode:"DAY • MUSIC • TROPICAL" },
-    { start:960, end:1109, cls:"theme-golden", title:"BALI GOLDEN HOUR", mode:"SUNSET • MUSIC • BALI" },
-    { start:1110, end:1439, cls:"theme-night", title:"BALI AFTER DARK", mode:"CHILL • MUSIC • NIGHT" }
+    { start:0, end:299, cls:"theme-midnight", title:"MIDNIGHT", mode:"MIDNIGHT • MUSIC • BALI" },
+    { start:300, end:659, cls:"theme-morning", title:"MORNING", mode:"MORNING • MUSIC • BALI" },
+    { start:660, end:959, cls:"theme-day", title:"DAY", mode:"DAY • MUSIC • TROPICAL" },
+    { start:960, end:1109, cls:"theme-golden", title:"GOLDEN HOUR", mode:"GOLDEN HOUR • MUSIC • BALI" },
+    { start:1110, end:1439, cls:"theme-night", title:"NIGHT", mode:"NIGHT • MUSIC • BALI" }
   ];
 
   const prompts = [
-    "DROP YOUR CITY IN CHAT",
+    "FROM BALI TO THE WORLD — 24/7",
     "REQUEST SONG: !play SONG - ARTIST",
-    "CURHAT KE AI: !curhat PESANMU",
     "ASK BALI AI: !tanya PERTANYAANMU",
+    "CURHAT KE AI: !curhat PESANMU",
     "FUN MODE: !roast • !quote • !jodoh",
-    "BALI TIME — WHO IS STILL AWAKE?"
+    "DROP YOUR CITY IN CHAT"
   ];
 
   // TikTok LIVE Studio's embedded browser may not ship full IANA timezone data.
@@ -161,6 +161,7 @@
 
   buildEqualizer();
   updateTimeAndTheme();
+  connectCloudAI();
 
   setInterval(updateTimeAndTheme, 1000);
   setInterval(rotatePrompt, 10000);
