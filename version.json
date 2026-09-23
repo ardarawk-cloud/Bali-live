@@ -1,5 +1,5 @@
 {
-  "version": "1.7.1",
-  "updated_at": "2026-09-24T04:18:00+08:00",
-  "notes": "Final polish of the v1.7 vintage radio layout: stronger mobile readability, warmer amber display, crisper branding, brighter ON AIR, clearer speaker/brass details, stronger request and Bali AI cards, improved tuner/equalizer visibility, and refined AI popup. Layout and functionality remain unchanged."
+  "version": "1.7.2",
+  "updated_at": "2026-09-24T05:42:00+08:00",
+  "notes": "Adds a separate empty gold PLAYLIST dock for manual Spotify placement. The main vintage radio layout stays unchanged so it does not shrink. Playlist dock has no internal rows or dividers and is intended to sit precisely below the radio without covering TikTok chat."
 }
