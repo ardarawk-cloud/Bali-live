@@ -1,5 +1,5 @@
 {
-  "version": "1.7.2",
-  "updated_at": "2026-09-24T05:42:00+08:00",
-  "notes": "Adds a separate empty gold PLAYLIST dock for manual Spotify placement. The main vintage radio layout stays unchanged so it does not shrink. Playlist dock has no internal rows or dividers and is intended to sit precisely below the radio without covering TikTok chat."
+  "version": "1.7.3",
+  "updated_at": "2026-09-24T05:50:00+08:00",
+  "notes": "Moves the empty gold PLAYLIST dock into the main Bali Live page so the original Bali Live URL remains the only source. The vintage radio layout stays unchanged; the playlist area sits directly below it with no internal rows or dividers for manual Spotify placement."
 }
