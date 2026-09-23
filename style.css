@@ -469,3 +469,123 @@ body.theme-night{--amber:#ffb45f;--amber-hot:#ffd995}
   .live-indicator{font-size:7.6px}
   .ai-live-card{width:72%;bottom:45px}
 }
+
+
+/* ===== v1.7.3 SAME-LINK PLAYLIST DOCK ===== */
+/* Keep the existing radio unchanged; use free vertical space below it for one empty Spotify dock. */
+.stage{
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:flex-start;
+  gap:8px;
+  padding:0;
+  overflow:hidden;
+}
+.radio-shell{
+  flex:0 0 auto;
+}
+.playlist-dock-main{
+  position:relative;
+  flex:0 0 auto;
+  width:min(100vw,calc(100vh * 4 / 3));
+  height:clamp(110px,22vh,180px);
+  overflow:hidden;
+  border:3px solid #824923;
+  border-radius:18px;
+  background:
+    radial-gradient(circle at 50% 0%,rgba(255,190,92,.055),transparent 36%),
+    linear-gradient(180deg,#0d0905 0%,#050403 42%,#030302 100%);
+  box-shadow:
+    inset 0 0 0 1px rgba(255,220,161,.16),
+    inset 0 0 28px rgba(0,0,0,.72),
+    0 0 18px rgba(211,142,54,.12);
+}
+.playlist-dock-main::before{
+  content:"";
+  position:absolute;
+  inset:7px;
+  border:1px solid rgba(244,190,109,.46);
+  border-radius:12px;
+  pointer-events:none;
+  box-shadow:
+    inset 0 0 0 1px rgba(86,48,18,.62),
+    inset 0 0 22px rgba(0,0,0,.58);
+}
+.playlist-dock-title{
+  position:absolute;
+  z-index:2;
+  top:5px;
+  left:50%;
+  transform:translateX(-50%);
+  height:34px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:14px;
+}
+.playlist-dock-title strong{
+  min-width:200px;
+  height:31px;
+  padding:0 24px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  border:2px solid #6f421e;
+  border-radius:10px;
+  background:linear-gradient(180deg,#f0c67f,#b97933 54%,#e0ad61);
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,.42),
+    inset 0 -1px 0 rgba(72,35,10,.35),
+    0 3px 8px rgba(0,0,0,.45),
+    0 0 16px rgba(230,164,77,.14);
+  color:#1b0f06;
+  font-family:Georgia,"Times New Roman",serif;
+  font-size:18px;
+  line-height:1;
+  font-weight:900;
+  letter-spacing:.12em;
+  text-shadow:0 1px 0 rgba(255,255,255,.32);
+}
+.playlist-bars{
+  width:42px;
+  height:17px;
+  opacity:.82;
+  background:
+    linear-gradient(90deg,
+      transparent 0 4px,
+      var(--brass) 4px 7px,
+      transparent 7px 11px,
+      var(--brass) 11px 15px,
+      transparent 15px 19px,
+      var(--brass-soft) 19px 23px,
+      transparent 23px 28px,
+      var(--brass) 28px 31px,
+      transparent 31px 36px,
+      var(--brass) 36px 40px,
+      transparent 40px 42px);
+  filter:drop-shadow(0 0 5px rgba(255,185,82,.20));
+}
+.playlist-bars.right{transform:scaleX(-1)}
+.playlist-dock-empty{
+  position:absolute;
+  left:12px;
+  right:12px;
+  top:43px;
+  bottom:12px;
+  border-radius:9px;
+  background:
+    radial-gradient(circle at 50% 20%,rgba(255,183,71,.022),transparent 46%),
+    linear-gradient(180deg,rgba(12,8,5,.88),rgba(3,3,2,.96));
+  box-shadow:inset 0 0 26px rgba(0,0,0,.66);
+}
+
+/* In short 4:3 browser sources, preserve the radio exactly and let the dock sit immediately below;
+   in taller TikTok source areas the dock uses the existing blank space. */
+@media(max-height:700px){
+  .playlist-dock-main{height:120px}
+  .playlist-dock-title{height:28px;top:3px}
+  .playlist-dock-title strong{height:27px;min-width:170px;font-size:14px}
+  .playlist-bars{width:34px;height:14px}
+  .playlist-dock-empty{top:35px;bottom:9px}
+}
