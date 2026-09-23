@@ -4,21 +4,46 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <title>Bali AI Overlay</title>
-  <link rel="stylesheet" href="./overlay.css">
+  <link rel="stylesheet" href="./overlay.css?v=1.6.0">
 </head>
 <body>
   <main id="card" class="ai-card hidden">
+    <div class="glow"></div>
     <div class="topline">
-      <span class="badge">BALI AI</span>
-      <span id="command" class="mode">!curhat</span>
+      <div class="brand">
+        <span class="orb"><i></i></span>
+        <div>
+          <span class="eyebrow">LIVE CO-HOST</span>
+          <strong>BALI AI</strong>
+        </div>
+      </div>
+      <span id="command" class="mode">!tanya</span>
     </div>
-    <div id="viewer" class="viewer">@viewer</div>
+
+    <div class="viewer-row">
+      <span class="avatar" id="avatar">A</span>
+      <div>
+        <span class="asked">QUESTION FROM</span>
+        <div id="viewer" class="viewer">@viewer</div>
+      </div>
+    </div>
+
     <div id="question" class="question"></div>
+
     <div class="answer-wrap">
-      <div id="thinking" class="thinking">AI lagi mikir<span>.</span><span>.</span><span>.</span></div>
+      <div id="thinking" class="thinking">
+        <span class="thinking-label">BALI AI IS THINKING</span>
+        <span class="dots"><i></i><i></i><i></i></span>
+      </div>
       <div id="answer" class="answer"></div>
     </div>
+
+    <div class="footer">
+      <span class="line"></span>
+      <span>AI LIVE RESPONSE</span>
+      <span class="line"></span>
+    </div>
   </main>
-  <script src="./overlay.js"></script>
+  <script src="./overlay.js?v=1.6.0"></script>
 </body>
 </html>
