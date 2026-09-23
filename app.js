@@ -1,6 +1,6 @@
 (() => {
   const BALI_TZ = "Asia/Makassar";
-  const CURRENT_VERSION = "1.5.0";
+  const CURRENT_VERSION = "1.5.1";
 
   const titleEl = document.getElementById("daypartTitle");
   const clockEl = document.getElementById("clock");
@@ -149,7 +149,6 @@
   }
 
   buildEqualizer();
-  buildRain();
   updateTimeAndTheme();
 
   setInterval(updateTimeAndTheme, 1000);
