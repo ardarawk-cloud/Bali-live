@@ -1,31 +1,56 @@
 *{box-sizing:border-box}
 html,body{margin:0;width:100%;height:100%;overflow:hidden;background:transparent;font-family:Inter,Arial,Helvetica,sans-serif;color:#fff}
-body{display:flex;align-items:flex-end;justify-content:center;padding:5vh 6vw 11vh}
+body{display:flex;align-items:flex-end;justify-content:center;padding:5vh 6vw 10vh}
 .ai-card{
-  width:min(88vw,780px);
-  padding:22px 24px 24px;
-  border-radius:26px;
-  border:1px solid rgba(255,255,255,.22);
-  background:linear-gradient(145deg,rgba(8,10,28,.94),rgba(25,17,55,.91));
-  box-shadow:0 18px 55px rgba(0,0,0,.38),0 0 28px rgba(112,126,255,.22);
-  backdrop-filter:blur(14px);
-  transition:opacity .28s ease,transform .28s ease;
+  position:relative;overflow:hidden;width:min(88vw,760px);padding:20px 22px 18px;border-radius:24px;
+  border:1px solid rgba(122,224,255,.28);
+  background:
+    linear-gradient(145deg,rgba(3,11,22,.95),rgba(7,19,34,.94) 58%,rgba(11,20,43,.94));
+  box-shadow:0 22px 64px rgba(0,0,0,.48),0 0 42px rgba(63,196,255,.16),inset 0 1px 0 rgba(255,255,255,.06);
+  backdrop-filter:blur(16px);
+  transition:opacity .32s ease,transform .32s cubic-bezier(.2,.8,.2,1),filter .32s ease
 }
-.ai-card.hidden{opacity:0;transform:translateY(18px);pointer-events:none}
-.topline{display:flex;align-items:center;gap:10px}
-.badge{font-size:13px;font-weight:950;letter-spacing:.16em;color:#9db2ff}
-.mode{margin-left:auto;padding:6px 10px;border-radius:999px;background:rgba(255,255,255,.08);font-weight:850;font-size:13px}
-.viewer{margin-top:14px;font-size:18px;font-weight:900;color:#fff}
-.question{margin-top:6px;color:rgba(255,255,255,.72);font-size:16px;line-height:1.35;max-height:2.7em;overflow:hidden}
-.answer-wrap{margin-top:15px;padding-top:14px;border-top:1px solid rgba(255,255,255,.12)}
-.answer{font-size:22px;line-height:1.35;font-weight:780;text-wrap:balance}
-.thinking{font-size:20px;font-weight:800;color:#fff}
-.thinking span{animation:blink 1.2s infinite}
-.thinking span:nth-child(2){animation-delay:.2s}.thinking span:nth-child(3){animation-delay:.4s}
-@keyframes blink{0%,80%,100%{opacity:.2}40%{opacity:1}}
+.ai-card::before{content:"";position:absolute;inset:0;pointer-events:none;background:linear-gradient(115deg,transparent 0 38%,rgba(255,255,255,.06) 48%,transparent 58%);transform:translateX(-120%);animation:sheen 7s ease-in-out infinite}
+.ai-card::after{content:"";position:absolute;left:0;right:0;top:0;height:2px;background:linear-gradient(90deg,transparent,#5bd7ff 38%,#a7f0ff 50%,#5bd7ff 62%,transparent);box-shadow:0 0 18px #5bd7ff}
+.ai-card.hidden{opacity:0;transform:translateY(28px) scale(.985);filter:blur(4px);pointer-events:none}
+.glow{position:absolute;width:260px;height:260px;border-radius:50%;right:-90px;top:-130px;background:radial-gradient(circle,rgba(65,194,255,.22),transparent 68%);pointer-events:none}
+
+.topline{position:relative;z-index:1;display:flex;align-items:center;gap:12px}
+.brand{display:flex;align-items:center;gap:10px}
+.orb{width:38px;height:38px;border-radius:12px;display:grid;place-items:center;border:1px solid rgba(128,230,255,.28);background:linear-gradient(145deg,rgba(26,126,255,.32),rgba(74,224,255,.15));box-shadow:0 0 24px rgba(72,205,255,.18)}
+.orb i{width:11px;height:11px;border-radius:50%;background:#78e6ff;box-shadow:0 0 0 5px rgba(120,230,255,.09),0 0 16px #78e6ff;animation:pulse 1.4s ease-in-out infinite}
+.eyebrow{display:block;font-size:8px;letter-spacing:.22em;color:rgba(255,255,255,.46);font-weight:900}
+.brand strong{display:block;margin-top:2px;font-size:18px;letter-spacing:.11em}
+.mode{margin-left:auto;padding:6px 11px;border-radius:999px;background:rgba(86,211,255,.09);border:1px solid rgba(86,211,255,.2);color:#9beaff;font-weight:900;font-size:12px;letter-spacing:.05em}
+
+.viewer-row{position:relative;z-index:1;margin-top:15px;display:flex;align-items:center;gap:10px}
+.avatar{width:34px;height:34px;border-radius:50%;display:grid;place-items:center;font-size:13px;font-weight:950;background:linear-gradient(145deg,#1d89ff,#58dfff);box-shadow:0 7px 18px rgba(0,0,0,.25)}
+.asked{display:block;font-size:8px;letter-spacing:.17em;color:rgba(255,255,255,.42);font-weight:900}
+.viewer{margin-top:2px;font-size:15px;font-weight:900;color:#fff}
+
+.question{position:relative;z-index:1;margin-top:11px;padding:10px 12px;border-radius:13px;border:1px solid rgba(255,255,255,.07);background:rgba(255,255,255,.035);color:rgba(255,255,255,.68);font-size:14px;line-height:1.35;max-height:3.9em;overflow:hidden}
+.answer-wrap{position:relative;z-index:1;margin-top:11px;padding:12px 13px;border-radius:14px;background:linear-gradient(90deg,rgba(54,196,255,.085),rgba(255,255,255,.025));border:1px solid rgba(93,219,255,.13)}
+.answer{font-size:20px;line-height:1.34;font-weight:800;text-wrap:balance;text-shadow:0 2px 12px rgba(0,0,0,.25)}
+.thinking{display:flex;align-items:center;justify-content:space-between;gap:12px}
+.thinking-label{font-size:13px;font-weight:900;letter-spacing:.08em;color:#a3ecff}
+.dots{display:flex;gap:5px}
+.dots i{width:7px;height:7px;border-radius:50%;background:#8deaff;box-shadow:0 0 9px rgba(141,234,255,.75);animation:dot 1.1s infinite ease-in-out}
+.dots i:nth-child(2){animation-delay:.15s}.dots i:nth-child(3){animation-delay:.3s}
+
+.footer{position:relative;z-index:1;margin-top:12px;display:flex;align-items:center;gap:8px;justify-content:center;font-size:7px;font-weight:900;letter-spacing:.18em;color:rgba(255,255,255,.32)}
+.footer .line{height:1px;width:50px;background:linear-gradient(90deg,transparent,rgba(116,225,255,.28))}
+.footer .line:last-child{transform:scaleX(-1)}
+
+.ai-card.answering .orb i{background:#6dffbd;box-shadow:0 0 0 5px rgba(109,255,189,.08),0 0 16px #6dffbd}
+.ai-card.answering::after{background:linear-gradient(90deg,transparent,#60ffc0 40%,#91f8ff 60%,transparent)}
+
+@keyframes dot{0%,60%,100%{transform:translateY(0);opacity:.35}30%{transform:translateY(-5px);opacity:1}}
+@keyframes pulse{50%{transform:scale(.72);opacity:.55}}
+@keyframes sheen{0%,74%{transform:translateX(-120%)}90%,100%{transform:translateX(120%)}}
 @media(max-width:520px){
-  body{padding:4vh 8vw 12vh}
-  .ai-card{padding:18px 19px 20px}
-  .answer{font-size:19px}
-  .question{font-size:14px}
+  body{padding:4vh 5vw 9vh}
+  .ai-card{width:92vw;padding:16px 16px 14px;border-radius:20px}
+  .answer{font-size:17px}
+  .question{font-size:12px}
+  .brand strong{font-size:16px}
 }
