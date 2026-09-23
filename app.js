@@ -1,6 +1,6 @@
 (() => {
   const BALI_TZ = "Asia/Makassar";
-  const CURRENT_VERSION = "1.4.0";
+  const CURRENT_VERSION = "1.5.0";
 
   const titleEl = document.getElementById("daypartTitle");
   const clockEl = document.getElementById("clock");
@@ -151,7 +151,6 @@
   buildEqualizer();
   buildRain();
   updateTimeAndTheme();
-  connectCloudAI();
 
   setInterval(updateTimeAndTheme, 1000);
   setInterval(rotatePrompt, 10000);
