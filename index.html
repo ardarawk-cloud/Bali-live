@@ -3,58 +3,126 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no" />
-  <meta name="theme-color" content="#06101a" />
+  <meta name="theme-color" content="#2a1208" />
   <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
   <meta http-equiv="Pragma" content="no-cache" />
   <meta http-equiv="Expires" content="0" />
-  <title>Bali Live</title>
-  <link rel="stylesheet" href="./style.css?v=1.6.0" />
+  <title>Bali Live Radio</title>
+  <link rel="stylesheet" href="./style.css?v=1.7.0" />
 </head>
-<body class="theme-night">
+<body class="theme-midnight">
   <main class="stage" id="stage">
-    <div class="grid"></div>
-    <div class="ambient ambient-a"></div>
-    <div class="ambient ambient-b"></div>
-    <div class="scanline"></div>
+    <section class="radio-shell">
+      <div class="wood-glow"></div>
 
-    <section class="top">
-      <div class="station-badge"><span class="dot"></span><span>BALI LIVE RADIO</span><b>ON AIR</b></div>
-      <div class="hero-kicker">INTERACTIVE RADIO • BALI</div>
-      <h1 id="daypartTitle">BALI AFTER DARK</h1>
-      <div class="date" id="date">BALI TIME</div>
-      <div class="meta"><span>LIVE REQUEST</span><span>BALI AI</span><span>24/7 MUSIC</span></div>
-      <div class="clock" id="clock">00:00:00</div>
-      <div class="equalizer" id="equalizer" aria-hidden="true"></div>
-      <div class="rotating-prompt" id="prompt">DROP YOUR CITY IN CHAT</div>
-    </section>
-
-    <section class="interaction-card">
-      <div class="interaction-row music-row">
-        <div class="interaction-icon music">♫</div>
-        <div class="interaction-copy">
-          <div class="interaction-label">SONG REQUEST</div>
-          <div class="command">!play Judul Lagu - Artis</div>
-          <div class="example">Contoh: !play Levels - Avicii • 1 point = 1 request</div>
+      <header class="radio-header">
+        <div class="brand-plate">
+          <span class="wave-mark">▮▯▮</span>
+          <span>BALI LIVE RADIO</span>
+          <span class="wave-mark">▮▯▮</span>
         </div>
-      </div>
+        <div class="on-air"><span class="on-air-dot"></span>ON AIR</div>
+      </header>
 
-      <div class="interaction-row ai-row">
-        <div class="interaction-icon ai">AI</div>
-        <div class="interaction-copy">
-          <div class="interaction-label">BALI AI CHAT</div>
-          <div class="command">!ai pertanyaan kamu</div>
-          <div class="example">!curhat • !tanya • !roast • !quote • !jodoh</div>
+      <section class="hero-plate">
+        <div class="hero-title">BALI LIVE RADIO</div>
+        <div class="dayparts">
+          <span>MIDNIGHT</span><b>•</b><span>MORNING</span><b>•</b><span>DAY</span><b>•</b><span>GOLDEN HOUR</span><b>•</b><span>NIGHT</span>
+          <strong>24/7</strong>
         </div>
-      </div>
-    </section>
+      </section>
 
-    <section class="lower-strip">
-      <div class="live-indicator"><span></span> LIVE NOW</div>
-      <div class="ticker"><span id="modeLabel">CHILL • MUSIC • NIGHT</span><i>•</i><span>REQUEST • AI • MUSIC</span></div>
-      <div class="signal">BALI // WITA</div>
+      <section class="radio-middle">
+        <aside class="speaker speaker-left">
+          <div class="speaker-grille"></div>
+          <div class="speaker-copy">FROM BALI<br>TO THE WORLD</div>
+        </aside>
+
+        <section class="display-panel">
+          <div class="display-topline">
+            <span id="daypartTitle" class="daypart-badge">BALI MIDNIGHT</span>
+            <span class="always-on">ALWAYS ON</span>
+          </div>
+
+          <div class="clock-row">
+            <span class="wita">WITA</span>
+            <div class="clock" id="clock">00:00:00</div>
+          </div>
+
+          <div class="date" id="date">BALI TIME</div>
+
+          <div class="tuner">
+            <div class="tuner-scale"></div>
+            <div class="tuner-needle"></div>
+          </div>
+
+          <div class="equalizer" id="equalizer" aria-hidden="true"></div>
+          <div class="rotating-prompt" id="prompt">DROP YOUR CITY IN CHAT</div>
+        </section>
+
+        <aside class="speaker speaker-right">
+          <div class="speaker-grille"></div>
+          <div class="speaker-copy">MUSIC CONNECTS<br>PEOPLE EVERYWHERE</div>
+        </aside>
+      </section>
+
+      <section class="controls">
+        <div class="knob-box">
+          <div class="knob"></div>
+          <div class="knob-label">VOLUME</div>
+        </div>
+
+        <article class="info-card request-card">
+          <div class="info-icon">♫</div>
+          <div class="info-copy">
+            <div class="info-label">SONG REQUEST</div>
+            <div class="info-command">!play Judul Lagu - Artis</div>
+            <div class="info-example">Contoh: !play Levels - Avicii • 1 point = 1 request</div>
+          </div>
+        </article>
+
+        <article class="info-card ai-card">
+          <div class="info-icon ai-icon">AI</div>
+          <div class="info-copy">
+            <div class="info-label">BALI AI CHAT</div>
+            <div class="info-command">!tanya pertanyaan kamu</div>
+            <div class="info-example">!curhat • !roast • !quote • !jodoh</div>
+          </div>
+        </article>
+
+        <div class="knob-box">
+          <div class="knob tuning-knob"></div>
+          <div class="knob-label">TUNING</div>
+        </div>
+      </section>
+
+      <footer class="radio-footer">
+        <div class="live-indicator"><span></span> LIVE NOW</div>
+        <div class="ticker">
+          <span id="modeLabel">CHILL • MUSIC • MIDNIGHT</span>
+          <i>•</i>
+          <span>LIVE REQUEST</span>
+          <i>•</i>
+          <span>BALI AI</span>
+          <i>•</i>
+          <span>24/7 MUSIC</span>
+        </div>
+        <div class="signal">BALI • INDONESIA</div>
+      </footer>
+
+      <section id="aiLiveCard" class="ai-live-card hidden" aria-live="polite">
+        <div class="ai-live-head">
+          <span>BALI AI LIVE</span>
+          <b id="aiLiveCommand">!tanya</b>
+        </div>
+        <div id="aiLiveViewer" class="ai-live-viewer">@viewer</div>
+        <div id="aiLiveQuestion" class="ai-live-question"></div>
+        <div id="aiLiveThinking" class="ai-live-thinking">BALI AI IS THINKING<span>.</span><span>.</span><span>.</span></div>
+        <div id="aiLiveAnswer" class="ai-live-answer"></div>
+      </section>
     </section>
   </main>
 
-  <script src="./app.js?v=1.6.0"></script>
+  <script src="./app.js?v=1.7.0"></script>
 </body>
 </html>
