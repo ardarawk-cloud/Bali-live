@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Bali Live Motion Pack</title>
+  <link rel="stylesheet" href="./motion.css?v=1.0.0">
+</head>
+<body>
+  <main id="motionRoot" class="motion-root">
+    <section id="songPopup" class="song-popup hidden" aria-live="polite">
+      <span class="song-kicker">NOW PLAYING</span>
+      <strong id="songTitle">BALI LIVE RADIO</strong>
+      <span id="songArtist">FROM BALI TO THE WORLD</span>
+      <i class="sweep"></i>
+    </section>
+
+    <section id="stationId" class="station-id hidden" aria-live="polite">
+      <span class="station-dot"></span>
+      <div>
+        <small>BALI LIVE RADIO</small>
+        <strong>FROM BALI TO THE WORLD</strong>
+      </div>
+    </section>
+
+    <section id="eventAlert" class="event-alert hidden" aria-live="polite">
+      <span id="eventIcon" class="event-icon">★</span>
+      <div class="event-copy">
+        <small id="eventType">LIVE EVENT</small>
+        <strong id="eventName">@viewer</strong>
+        <span id="eventDetail"></span>
+      </div>
+    </section>
+
+    <footer class="motion-ticker">
+      <span class="ticker-live"><i></i> LIVE</span>
+      <div class="ticker-window"><span id="tickerText">BALI LIVE RADIO • 24/7 FROM BALI</span></div>
+      <span class="ticker-bars" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i></span>
+    </footer>
+  </main>
+  <script src="./motion.js?v=1.0.0"></script>
+</body>
+</html>
