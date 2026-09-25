@@ -1,5 +1,5 @@
 {
-  "version": "1.7.3",
-  "updated_at": "2026-09-24T05:50:00+08:00",
-  "notes": "Moves the empty gold PLAYLIST dock into the main Bali Live page so the original Bali Live URL remains the only source. The vintage radio layout stays unchanged; the playlist area sits directly below it with no internal rows or dividers for manual Spotify placement."
+  "version": "1.8.0",
+  "updated_at": "2026-09-26T04:45:00+08:00",
+  "notes": "Restores the stable vintage radio layout and moves motion features to a separate local transparent overlay. Motion Pack v1 adds Now Playing transitions, rotating CTA ticker, station-ID visuals, and TikFinity join/follow/share/gift alerts without changing the main radio layout."
 }
