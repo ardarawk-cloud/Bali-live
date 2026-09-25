@@ -1,6 +1,6 @@
 (() => {
   const BALI_TZ = "Asia/Makassar";
-  const CURRENT_VERSION = "1.7.3";
+  const CURRENT_VERSION = "1.8.0";
 
   const titleEl = document.getElementById("daypartTitle");
   const clockEl = document.getElementById("clock");
