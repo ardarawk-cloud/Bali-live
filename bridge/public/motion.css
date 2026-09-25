@@ -1,0 +1,65 @@
+*{box-sizing:border-box}
+html,body{margin:0;width:100%;height:100%;overflow:hidden;background:transparent;font-family:Arial,Helvetica,sans-serif;color:#fff}
+.motion-root{position:relative;width:100%;height:100%;overflow:hidden;background:transparent}
+.song-popup{
+  position:absolute;left:50%;top:8%;width:min(78vw,760px);transform:translate(-50%,0);
+  padding:17px 22px 16px;border-radius:18px;border:2px solid rgba(203,139,57,.72);
+  background:linear-gradient(145deg,rgba(16,8,3,.96),rgba(5,4,3,.95));
+  box-shadow:inset 0 0 0 1px rgba(255,221,161,.09),0 18px 46px rgba(0,0,0,.44),0 0 30px rgba(255,165,60,.14);
+  transition:opacity .28s ease,transform .35s cubic-bezier(.2,.8,.2,1);overflow:hidden
+}
+.song-popup.hidden{opacity:0;transform:translate(-50%,-18px) scale(.97);pointer-events:none}
+.song-kicker{display:block;color:#e9aa60;font-size:10px;font-weight:950;letter-spacing:.22em}
+.song-popup strong{display:block;margin-top:5px;color:#ffe2a6;font-family:Georgia,"Times New Roman",serif;font-size:28px;line-height:1.05;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;text-shadow:0 0 12px rgba(255,183,83,.22)}
+.song-popup>span:last-of-type{display:block;margin-top:4px;color:#c9b08b;font-size:13px;font-weight:800;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.sweep{position:absolute;left:-40%;bottom:0;width:36%;height:2px;background:linear-gradient(90deg,transparent,#ffe3a0,transparent);box-shadow:0 0 12px #ffbd62;animation:sweep 2.2s ease-in-out infinite}
+
+.station-id{
+  position:absolute;left:50%;top:28%;transform:translateX(-50%);display:flex;align-items:center;gap:12px;
+  min-width:min(74vw,680px);padding:15px 20px;border-radius:16px;border:1px solid rgba(255,72,72,.42);
+  background:linear-gradient(100deg,rgba(44,9,7,.94),rgba(11,6,3,.95));
+  box-shadow:0 16px 40px rgba(0,0,0,.42),0 0 34px rgba(255,62,55,.17);
+  transition:opacity .22s ease,transform .3s ease
+}
+.station-id.hidden{opacity:0;transform:translate(-50%,12px) scale(.98);pointer-events:none}
+.station-dot{width:13px;height:13px;border-radius:50%;background:#ff4a43;box-shadow:0 0 0 5px rgba(255,74,67,.10),0 0 18px #ff4a43;animation:pulse 1s ease-in-out infinite}
+.station-id small{display:block;color:#ffb9a7;font-size:9px;font-weight:950;letter-spacing:.2em}
+.station-id strong{display:block;margin-top:3px;color:#fff0da;font-family:Georgia,"Times New Roman",serif;font-size:20px;letter-spacing:.05em}
+
+.event-alert{
+  position:absolute;right:5%;top:47%;width:min(60vw,520px);display:flex;align-items:center;gap:12px;
+  padding:13px 15px;border-radius:16px;border:1px solid rgba(229,174,94,.36);
+  background:linear-gradient(145deg,rgba(10,8,5,.95),rgba(26,14,6,.94));
+  box-shadow:0 14px 34px rgba(0,0,0,.38),0 0 26px rgba(255,184,83,.10);
+  transition:opacity .24s ease,transform .28s cubic-bezier(.2,.8,.2,1)
+}
+.event-alert.hidden{opacity:0;transform:translateX(24px) scale(.97);pointer-events:none}
+.event-icon{width:42px;height:42px;flex:0 0 42px;border-radius:12px;display:grid;place-items:center;background:linear-gradient(145deg,#ffca72,#9f6026);color:#281305;font-size:20px;font-weight:950;box-shadow:0 0 20px rgba(255,177,72,.14)}
+.event-copy{min-width:0}
+.event-copy small{display:block;color:#d89a55;font-size:8px;font-weight:950;letter-spacing:.18em}
+.event-copy strong{display:block;margin-top:3px;font-size:17px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.event-copy span{display:block;margin-top:3px;color:#c7ad88;font-size:11px;font-weight:800;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+
+.motion-ticker{
+  position:absolute;left:5%;right:5%;bottom:4%;height:44px;display:flex;align-items:center;gap:12px;padding:0 14px;
+  border-radius:13px;border:1px solid rgba(213,157,78,.40);
+  background:linear-gradient(180deg,rgba(16,11,6,.94),rgba(5,4,3,.94));
+  box-shadow:inset 0 1px 0 rgba(255,218,154,.05),0 10px 28px rgba(0,0,0,.33)
+}
+.ticker-live{flex:0 0 auto;color:#ffe4ba;font-size:9px;font-weight:950;letter-spacing:.14em}
+.ticker-live i{display:inline-block;width:8px;height:8px;margin-right:6px;border-radius:50%;background:#ff4845;box-shadow:0 0 10px #ff4845;animation:pulse 1s infinite}
+.ticker-window{position:relative;flex:1;min-width:0;overflow:hidden;height:100%;display:flex;align-items:center}
+#tickerText{display:inline-block;min-width:100%;white-space:nowrap;color:#e4c496;font-size:11px;font-weight:900;letter-spacing:.07em;animation:tickerSlide 10s linear infinite}
+.ticker-bars{height:22px;display:flex;align-items:flex-end;gap:3px}
+.ticker-bars i{width:3px;border-radius:2px;background:linear-gradient(180deg,#ffe5af,#d08a3d);animation:eq .7s ease-in-out infinite alternate}
+.ticker-bars i:nth-child(1){height:8px}.ticker-bars i:nth-child(2){height:17px;animation-delay:.1s}.ticker-bars i:nth-child(3){height:12px;animation-delay:.2s}.ticker-bars i:nth-child(4){height:20px;animation-delay:.3s}.ticker-bars i:nth-child(5){height:10px;animation-delay:.4s}
+
+@keyframes pulse{50%{opacity:.42;transform:scale(.82)}}
+@keyframes sweep{0%{left:-40%;opacity:0}18%{opacity:1}78%{opacity:1}100%{left:110%;opacity:0}}
+@keyframes tickerSlide{0%,12%{transform:translateX(0)}88%,100%{transform:translateX(-18%)}}
+@keyframes eq{from{transform:scaleY(.45);opacity:.55}to{transform:scaleY(1);opacity:1}}
+@media(max-width:520px){
+  .song-popup{width:88vw;padding:13px 15px}.song-popup strong{font-size:20px}.song-popup>span:last-of-type{font-size:11px}
+  .station-id{min-width:84vw;padding:12px 14px}.station-id strong{font-size:15px}
+  .event-alert{right:4%;width:72vw}.motion-ticker{left:4%;right:4%;height:40px}.ticker-bars{display:none}
+}
