@@ -36,6 +36,14 @@ let state = {
 const userCooldown = new Map();
 const seenMessages = new Map();
 const sseClients = new Set();
+const motionSseClients = new Set();
+
+let motionState = {
+  seq:0,
+  track:{ title:"", artist:"", updatedAt:0 },
+  station:{ active:false, text:"", updatedAt:0 },
+  alert:null
+};
 
 let queue = [];
 let working = false;
@@ -44,6 +52,64 @@ let reconnectTimer = null;
 let lastTikfinityEventAt = 0;
 let lastChatAt = 0;
 let lastCommandAt = 0;
+
+function publicMotionState() {
+  return {
+    ...motionState,
+    tikfinityConnected,
+    now:Date.now()
+  };
+}
+
+function broadcastMotion() {
+  const payload = `data: ${JSON.stringify(publicMotionState())}\n\n`;
+  for (const res of motionSseClients) {
+    try { res.write(payload); } catch {}
+  }
+}
+
+function setTrackMotion(title="", artist="") {
+  motionState = {
+    ...motionState,
+    seq:motionState.seq+1,
+    track:{
+      title:String(title || "").trim().slice(0,120),
+      artist:String(artist || "").trim().slice(0,120),
+      updatedAt:Date.now()
+    }
+  };
+  broadcastMotion();
+}
+
+function setStationMotion(active=false, text="") {
+  motionState = {
+    ...motionState,
+    seq:motionState.seq+1,
+    station:{
+      active:Boolean(active),
+      text:String(text || "").trim().slice(0,220),
+      updatedAt:Date.now()
+    }
+  };
+  broadcastMotion();
+}
+
+function pushMotionAlert(type, data={}) {
+  motionState = {
+    ...motionState,
+    seq:motionState.seq+1,
+    alert:{
+      id:`${Date.now()}-${Math.random().toString(36).slice(2,7)}`,
+      type:String(type || "event"),
+      username:String(data.username || "viewer").slice(0,80),
+      nickname:String(data.nickname || data.username || "Viewer").slice(0,80),
+      detail:String(data.detail || "").slice(0,140),
+      createdAt:Date.now(),
+      expiresAt:Date.now()+7500
+    }
+  };
+  broadcastMotion();
+}
 
 function maskPrivateInfo(text="") {
   return String(text)
@@ -280,6 +346,46 @@ function handleChat(data={}) {
   enqueue({ ...parsed, user });
 }
 
+function handleMotionTikfinityEvent(eventName, data={}) {
+  const user = getUser(data);
+  const lower = String(eventName || "").toLowerCase();
+
+  if (lower.includes("gift")) {
+    const giftName =
+      data.giftName ||
+      data.gift?.name ||
+      data.gift?.giftName ||
+      data.extendedGiftInfo?.name ||
+      "gift";
+    const repeat =
+      Number(data.repeatCount || data.repeat_count || data.combo || data.repeatEnd || 1) || 1;
+    pushMotionAlert("gift", {
+      ...user,
+      detail:`${giftName}${repeat > 1 ? ` ×${repeat}` : ""}`
+    });
+    return;
+  }
+
+  if (lower.includes("follow")) {
+    pushMotionAlert("follow", { ...user, detail:"FOLLOWED THE RADIO" });
+    return;
+  }
+
+  if (lower.includes("share")) {
+    pushMotionAlert("share", { ...user, detail:"SHARED THE LIVE" });
+    return;
+  }
+
+  if (
+    lower.includes("join") ||
+    lower.includes("member") ||
+    lower.includes("enter") ||
+    lower.includes("viewer")
+  ) {
+    pushMotionAlert("join", { ...user, detail:"JOINED BALI LIVE RADIO" });
+  }
+}
+
 function handleTikfinityMessage(raw) {
   try {
     const msg = JSON.parse(raw.toString());
@@ -292,6 +398,8 @@ function handleTikfinityMessage(raw) {
     if (eventName === "chat" || eventName === "comment" || eventName.includes("chat")) {
       handleChat(data);
     }
+
+    handleMotionTikfinityEvent(eventName, data);
   } catch (err) {
     console.error("TikFinity message parse error:", err?.message || err);
   }
@@ -328,6 +436,51 @@ function connectTikFinity() {
     try { ws.close(); } catch {}
   });
 }
+
+app.get("/api/motion", (_req,res) => {
+  res.set("Cache-Control","no-store");
+  res.json(publicMotionState());
+});
+
+app.get("/api/motion/events", (req,res) => {
+  res.set({
+    "Content-Type":"text/event-stream",
+    "Cache-Control":"no-cache, no-transform",
+    "Connection":"keep-alive",
+    "X-Accel-Buffering":"no"
+  });
+  res.flushHeaders?.();
+  motionSseClients.add(res);
+  res.write(`data: ${JSON.stringify(publicMotionState())}\n\n`);
+
+  const keepAlive = setInterval(() => {
+    try { res.write(": ping\n\n"); } catch {}
+  }, 15000);
+
+  req.on("close", () => {
+    clearInterval(keepAlive);
+    motionSseClients.delete(res);
+  });
+});
+
+app.post("/api/motion/track", (req,res) => {
+  setTrackMotion(req.body?.title, req.body?.artist);
+  res.json({ ok:true, motion:publicMotionState() });
+});
+
+app.post("/api/motion/station", (req,res) => {
+  setStationMotion(req.body?.active, req.body?.text);
+  res.json({ ok:true, motion:publicMotionState() });
+});
+
+app.post("/api/motion/test-alert", (req,res) => {
+  pushMotionAlert(req.body?.type || "follow", {
+    username:req.body?.username || "localtest",
+    nickname:req.body?.nickname || "Local Test",
+    detail:req.body?.detail || "MOTION PACK TEST"
+  });
+  res.json({ ok:true, motion:publicMotionState() });
+});
 
 app.get("/api/state", (_req,res) => {
   res.set("Cache-Control","no-store");
@@ -384,7 +537,8 @@ app.get("/health", (_req,res) => {
 app.listen(PORT, "127.0.0.1", () => {
   console.log("");
   console.log("BALI LIVE AI ONLINE");
-  console.log(`Overlay: http://localhost:${PORT}/overlay.html`);
+  console.log(`AI      : http://localhost:${PORT}/overlay.html`);
+  console.log(`Motion  : http://localhost:${PORT}/motion.html`);
   console.log(`Health : http://localhost:${PORT}/health`);
   console.log("");
   connectTikFinity();
