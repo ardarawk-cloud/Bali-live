@@ -1,0 +1,47 @@
+[
+  {
+    "name": "Bali Live visual loads with active clock",
+    "sanity": true,
+    "viewport": "desktop",
+    "covers": [
+      "main Bali Live visual",
+      "automatic Bali clock",
+      "interactive command panel"
+    ],
+    "description": "Verifies the primary live visual renders with the clock and interaction commands visible.",
+    "steps": [
+      "Open the app",
+      "Observe the Bali title and live clock",
+      "Observe the Song Request and Bali AI command cards"
+    ],
+    "expected": "The Bali Live visual is visible, the clock shows a time, and both interaction command cards are present."
+  },
+  {
+    "name": "Cloud AI configuration state is visible",
+    "viewport": "desktop",
+    "covers": ["cloud TikTok connection status", "Euler JWT backend route"],
+    "description": "Verifies the page exposes a clear cloud connection state while the TikTok integration initializes.",
+    "steps": [
+      "Open the app",
+      "Wait for the cloud connection attempt",
+      "Observe the small CLOUD AI status text"
+    ],
+    "expected": "A CLOUD AI status is visible and reports connecting, setup, waiting live, connected, retrying, or connection error."
+  },
+  {
+    "name": "Mobile layout keeps commands readable",
+    "viewport": "mobile",
+    "covers": [
+      "mobile live layout",
+      "responsive command cards",
+      "AI response overlay layout"
+    ],
+    "description": "Verifies the live composition remains readable on a portrait mobile viewport.",
+    "steps": [
+      "Open the app on mobile viewport",
+      "Observe the title, clock, and equalizer",
+      "Observe the two interaction cards"
+    ],
+    "expected": "The title, clock, equalizer, and interaction cards fit the portrait viewport without horizontal overflow."
+  }
+]
