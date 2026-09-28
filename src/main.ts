@@ -1,5 +1,5 @@
 import './styles.css';
-import { api } from '@appdeploy/client';
+import { api } from './appdeploy-client';
 import { createWebSocketUrl, SchemaVersion } from '@eulerstream/euler-websocket-sdk';
 
 const BALI_TZ = 'Asia/Makassar';
